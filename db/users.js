@@ -24,18 +24,18 @@ async function createUser({ username, password }) {
 }
 
 async function getUser({ username, password }) {
-  try {
-    const { rows } = await client.query(
-      `
-      SELECT username, id
-      FROM users
-      WHERE username=${username} and password=${password}`
-    );
-    return rows;
-  } catch (error) {
-    console.error("error getting user");
-    throw error;
-  }
+  // try {
+  //   const { rows } = await client.query(
+  //     `
+  //     SELECT username, id
+  //     FROM users
+  //     WHERE username=${username} and password=${password}`
+  //   );
+  //   return rows;
+  // } catch (error) {
+  //   console.error("error getting user");
+  //   throw error;
+  // }
 }
 
 async function getUserById(userId) {

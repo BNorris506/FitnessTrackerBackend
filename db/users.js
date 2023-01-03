@@ -28,7 +28,8 @@ async function getUser({ username, password }) {
     const { rows } = await client.query(
       `
       SELECT username, id
-      FROM users`
+      FROM users
+      WHERE username=${username} and password=${password}`
     );
     return rows;
   } catch (error) {
@@ -37,9 +38,39 @@ async function getUser({ username, password }) {
   }
 }
 
-async function getUserById(userId) {}
+async function getUserById(userId) {
+  try {
+    const { rows: [ user ] } = await client.query(
+      `
+      SELECT id, username 
+      FROM users
+      WHERE id=${userId}`
+    );
+    if(!user){
+      return null
+    }
+    return user
+  } catch (error) {
+    console.error("error getting User by Id");
+    throw error;
+  }
 
-async function getUserByUsername(userName) {}
+}
+
+async function getUserByUsername(userName) {
+  try {
+    const { rows: [ user ] } = await client.query(
+      `
+      SELECT username 
+      FROM users
+      WHERE username=${userName}`
+    );
+    return user
+  } catch (error) {
+    console.error("error getting userName");
+    throw error;
+  }
+}
 
 module.exports = {
   createUser,

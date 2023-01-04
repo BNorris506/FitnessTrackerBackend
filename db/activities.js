@@ -10,7 +10,6 @@ async function createActivity({ name, description }) {
       RETURNING *;
       `, [name, description]
     );
-    console.log("Here are the rows in line 13", activities)
     return activities
   } catch (error) {
     console.error("error creating activity")

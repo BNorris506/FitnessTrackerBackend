@@ -10,6 +10,7 @@ async function createRoutine({ creatorId, ispublic, name, goal }) {
     RETURNING *
     `, [creatorId, ispublic, name, goal]
     );
+    console.log("These are the rows", rows)
     return rows
   } catch (error) {
     console.error("error creating routine")
@@ -112,7 +113,17 @@ async function getPublicRoutinesByUser({ username }) {
   }
 }
 
-async function getPublicRoutinesByActivity({ id }) {}
+async function getPublicRoutinesByActivity({ id }) {
+  try {
+    const { rows: [routines] } = await client.query(
+      `
+      `
+    )
+  } catch (error) {
+    console.error("error getting public routines by activity")
+    throw error
+  }
+}
 
 async function updateRoutine({ id, ...fields }) {}
 

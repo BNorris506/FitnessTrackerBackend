@@ -3,15 +3,15 @@ const client = require('./client');
 // database functions
 async function createActivity({ name, description }) {
   try {
-    const { rows } = await client.query(
+    const { rows: [activities] } = await client.query(
       `
       INSERT INTO activities(name, description)
       VALUES ($1, $2)
-      ON CONFLICT do nothing
       RETURNING *;
       `, [name, description]
     );
-    return rows
+    console.log("Here are the rows in line 13", activities)
+    return activities
   } catch (error) {
     console.error("error creating activity")
     throw error
@@ -48,7 +48,21 @@ async function getActivityById(id) {
   }
 }
 
-async function getActivityByName(name) {}
+async function getActivityByName(name) {
+  try {
+    const { rows: [activities] } = await client.query(
+      `
+      SELECT * 
+      FROM activities
+      WHERE name = $1
+      `, [name]
+    )
+    return activities
+  } catch (error) {
+    console.error("error getting activity by name")
+    throw error
+  }
+}
 
 async function attachActivitiesToRoutines(routines) {
   // select and return an array of all activities

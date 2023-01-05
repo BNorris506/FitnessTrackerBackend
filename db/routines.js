@@ -120,14 +120,14 @@ async function getPublicRoutinesByActivity({ id }) {
   try {
     const { rows: routines } = await client.query(
       `
-  SELECT routines.*, users.username AS "creatorName"
-  FROM routines
-  JOIN users ON routines."creatorId" = users.id
-  WHERE username = $1 AND "isPublic" = true;
+      SELECT * FROM routines_activities
+      JOIN routines ON routines."routineId" = routine.id
+      WHERE "activityId" = $1 AND "isPublic" = true;
   `,
-      [username]
+      [id]
     );
-    return attachActivitiesToRoutines(routines);
+    console.log("This is routines:", routines);
+    return routines;
   } catch (error) {
     console.error("not getting all routines", error);
     throw error;
@@ -157,6 +157,7 @@ async function updateRoutine({ id, ...fields }) {
 
     return routine;
   } catch (error) {
+    console.error("error updatingRoutine");
     throw error;
   }
 }

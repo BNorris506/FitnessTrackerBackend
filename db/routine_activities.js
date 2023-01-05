@@ -77,7 +77,7 @@ async function updateRoutineActivity({ id, ...fields }) {
 
     return routine_activities;
   } catch (error) {
-    console.error("error updatingRoutine");
+    console.error("error updating Routine Activities");
     throw error;
   }
 }
@@ -93,15 +93,25 @@ async function destroyRoutineActivity(id) {
       RETURNING *
       `, [id]
     );
-    console.log(routine_activity.id)
     return routine_activity;
   } catch (error) {
-    console.error("error destroying routines");
+    console.error("error destroying routine activities");
     throw error;
   }
 }
 
-async function canEditRoutineActivity(routineActivityId, userId) {}
+async function canEditRoutineActivity(routineActivityId, userId) {
+  try {
+    const { rows: [routine_activity] } = await client.query(`
+  SELECT *
+  FROM routine_activities
+  JOIN routines ON routine_activities."routineId" = routines.id AND routine_activities.id=$1
+  `, [routineActivityId]);
+    return userId === routine_activity.creatorId
+  } catch (error) {
+    console.error("error editing routine activity")
+  }
+}
 
 module.exports = {
   getRoutineActivityById,

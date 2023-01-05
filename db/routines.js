@@ -67,14 +67,18 @@ async function getAllRoutines() {
 
 async function getAllPublicRoutines() {
   try {
-    const { rows } = await client.query(
+    const { rows: routine } = await client.query(
       `
-      SELECT * 
+      SELECT *
       FROM routines
       WHERE ispublic = true
       `
     );
-    return rows;
+    routine.map((routine) => {
+      return;
+    });
+    console.log("This is our routine:", routine);
+    return routine;
   } catch (error) {
     console.error("error getting all public Routines");
     throw error;
@@ -87,8 +91,7 @@ async function getAllRoutinesByUser({ username }) {
       `
       SELECT *
       FROM routines
-      WHERE creatorId = ${username.id}
-      RETURNING *
+      WHERE creatorId = $1;
       `
     );
     return rows;

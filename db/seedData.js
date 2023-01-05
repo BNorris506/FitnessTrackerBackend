@@ -1,8 +1,11 @@
 // require in the database adapter functions as you write them (createUser, createActivity...)
-const { createUser } = require('./users');
-const { createActivity, getAllActivities} = require('./activities.js');
-const { createRoutine, getRoutinesWithoutActivities} = require('./routines.js')
-const { addActivityToRoutine} = require('./routine_activities')
+const { createUser } = require("./users");
+const { createActivity, getAllActivities } = require("./activities.js");
+const {
+  createRoutine,
+  getRoutinesWithoutActivities,
+} = require("./routines.js");
+const { addActivityToRoutine } = require("./routine_activities");
 const client = require("./client");
 
 async function dropTables() {
@@ -43,7 +46,7 @@ async function createTables() {
       CREATE TABLE routines (
         id SERIAL PRIMARY KEY,
         "creatorId" INTEGER REFERENCES users(id),
-        ispublic BOOLEAN DEFAULT false,
+        "isPublic" BOOLEAN DEFAULT false,
         name VARCHAR(255) UNIQUE NOT NULL,
         goal TEXT NOT NULL
       );
@@ -131,25 +134,25 @@ async function createInitialRoutines() {
   const routinesToCreate = [
     {
       creatorId: 2,
-      ispublic: false,
+      isPublic: false,
       name: "Bicep Day",
       goal: "Work the Back and Biceps.",
     },
     {
       creatorId: 1,
-      ispublic: true,
+      isPublic: true,
       name: "Chest Day",
       goal: "To beef up the Chest and Triceps!",
     },
     {
       creatorId: 1,
-      ispublic: false,
+      isPublic: false,
       name: "Leg Day",
       goal: "Running, stairs, squats",
     },
     {
       creatorId: 2,
-      ispublic: true,
+      isPublic: true,
       name: "Cardio Day",
       goal: "Running, stairs. Stuff that gets your heart pumping!",
     },

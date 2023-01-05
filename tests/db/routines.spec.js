@@ -35,7 +35,7 @@ function expectRoutinesToContainRoutine(routines, fakeRoutine) {
   const routine = routines.find((routine) => routine.id === fakeRoutine.id);
   expect(routine.id).toEqual(fakeRoutine.id);
   expect(routine.name).toEqual(fakeRoutine.name);
-  expect(routine.ispublic).toEqual(fakeRoutine.ispublic);
+  expect(routine.isPublic).toEqual(fakeRoutine.isPublic);
   expect(routine.creatorId).toEqual(fakeRoutine.creatorId);
   expect(routine.goal).toEqual(fakeRoutine.goal);
 }
@@ -48,7 +48,7 @@ function expectRoutinesToContainRoutineWithActivity(
   const routine = routines.find((routine) => routine.id === fakeRoutine.id);
   expect(routine.id).toEqual(fakeRoutine.id);
   expect(routine.name).toEqual(fakeRoutine.name);
-  expect(routine.ispublic).toEqual(fakeRoutine.ispublic);
+  expect(routine.isPublic).toEqual(fakeRoutine.isPublic);
   expect(routine.creatorId).toEqual(fakeRoutine.creatorId);
   expect(routine.goal).toEqual(fakeRoutine.goal);
   expectRoutineToContainActivity(routine, fakeActivity);
@@ -121,7 +121,7 @@ describe("DB Routines", () => {
       const user = await createFakeUser();
       const routine = await createRoutine({
         creatorId: user.id,
-        ispublic: true,
+        isPublic: true,
         name: faker.random.uuid(),
         goal: faker.random.uuid(),
       });
@@ -129,7 +129,7 @@ describe("DB Routines", () => {
         objectContaining({
           id: expect.any(Number),
           creatorId: routine.creatorId,
-          ispublic: routine.ispublic,
+          isPublic: routine.isPublic,
           name: routine.name,
           goal: routine.goal,
         })
@@ -413,7 +413,7 @@ describe("DB Routines", () => {
 
       const updatedRoutine = await updateRoutine({
         id: fakeRoutine.id,
-        ispublic: false,
+        isPublic: false,
         name: faker.random.uuid(),
         goal: faker.random.uuid(),
       });
@@ -429,12 +429,12 @@ describe("DB Routines", () => {
 
       const updatedRoutine = await updateRoutine({
         id: fakeRoutine.id,
-        ispublic: false,
+        isPublic: false,
         name,
         goal,
       });
 
-      expect(updatedRoutine.ispublic).toBe(false);
+      expect(updatedRoutine.isPublic).toBe(false);
       expect(updatedRoutine.name).toBe(name);
       expect(updatedRoutine.goal).toBe(goal);
     });
@@ -446,7 +446,7 @@ describe("DB Routines", () => {
         id: fakeRoutine.id,
         name,
       });
-      expect(updatedRoutine.ispublic).toBe(fakeRoutine.ispublic);
+      expect(updatedRoutine.isPublic).toBe(fakeRoutine.isPublic);
       expect(updatedRoutine.name).toBe(name);
       expect(updatedRoutine.goal).toBe(fakeRoutine.goal);
     });

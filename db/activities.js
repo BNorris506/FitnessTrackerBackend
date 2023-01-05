@@ -88,7 +88,6 @@ async function attachActivitiesToRoutines(routines) {
 
       routine.activities = activitiesToAdd;
     }
-
     return routinesToReturn;
   } catch (error) {
     console.error("error attaching", error);

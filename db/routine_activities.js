@@ -44,7 +44,7 @@ async function getRoutineActivitiesByRoutine({ id }) {
       SELECT *
       FROM routine_activities
       JOIN routines ON routine_activities."routineId"=routines.id
-      WHERE routine_activities."routineId" = $1
+      WHERE "routineId" = $1
     `, [id]
     );
     return routine_activity;

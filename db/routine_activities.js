@@ -7,34 +7,40 @@ async function addActivityToRoutine({
   count,
   duration,
 }) {
-  try{
-    const {rows: [routine]} = await client.query(
+  try {
+    const {
+      rows: [routine],
+    } = await client.query(
       `
       INSERT INTO routine_activities("routineId", "activityId", count, duration)
       VALUES ($1, $2, $3, $4)
       RETURNING *
-      `, [routineId, activityId, count, duration])
-    return routine; 
+      `,
+      [routineId, activityId, count, duration]
+    );
+    return routine;
   } catch (error) {
-    console.error("error adding activity to routine")
-    throw error
+    console.error("error adding activity to routine");
+    throw error;
   }
 }
 
 async function getRoutineActivityById(id) {
   try {
-  const { rows: [routine_activity] } = await client.query(
-    `
+    const {
+      rows: [routine_activity],
+    } = await client.query(
+      `
     SELECT *
     FROM routine_activities
     WHERE id = ${id}
   `
-  );
-  return routine_activity;
-} catch (error) {
-  console.error("error getting Routine by Id");
-  throw error;
-}
+    );
+    return routine_activity;
+  } catch (error) {
+    console.error("error getting Routine by Id");
+    throw error;
+  }
 }
 
 async function getRoutineActivitiesByRoutine({ id }) {
@@ -45,14 +51,15 @@ async function getRoutineActivitiesByRoutine({ id }) {
       FROM routine_activities
       JOIN routines ON routine_activities."routineId"=routines.id
       WHERE "routineId" = $1
-    `, [id]
+    `,
+      [id]
     );
     return routine_activity;
   } catch (error) {
     console.error("error getting Routine by Id");
     throw error;
   }
-  }
+}
 
 async function updateRoutineActivity({ id, ...fields }) {
   const setString = Object.keys(fields)
@@ -85,13 +92,14 @@ async function updateRoutineActivity({ id, ...fields }) {
 async function destroyRoutineActivity(id) {
   try {
     const {
-      rows: [routine_activity]
+      rows: [routine_activity],
     } = await client.query(
       `
       DELETE FROM routine_activities
       WHERE id = $1
       RETURNING *
-      `, [id]
+      `,
+      [id]
     );
     return routine_activity;
   } catch (error) {
@@ -102,14 +110,19 @@ async function destroyRoutineActivity(id) {
 
 async function canEditRoutineActivity(routineActivityId, userId) {
   try {
-    const { rows: [routine_activity] } = await client.query(`
+    const {
+      rows: [routine_activity],
+    } = await client.query(
+      `
   SELECT *
   FROM routine_activities
   JOIN routines ON routine_activities."routineId" = routines.id AND routine_activities.id=$1
-  `, [routineActivityId]);
-    return userId === routine_activity.creatorId
+  `,
+      [routineActivityId]
+    );
+    return userId === routine_activity.creatorId;
   } catch (error) {
-    console.error("error editing routine activity")
+    console.error("error editing routine activity");
   }
 }
 

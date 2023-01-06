@@ -128,6 +128,7 @@ async function updateActivity({ id, ...fields }) {
 
     return activity;
   } catch (error) {
+    console.error("error updating activity");
     throw error;
   }
 }

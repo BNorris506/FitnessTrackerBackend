@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const app = express();
-const apiRouter = require("./api");
+const router = require("./api");
 const morgan = require("morgan");
 const cors = require("cors");
 const client = require("./db/client");
@@ -13,7 +13,8 @@ app.use(cors());
 // Setup your Middleware and API Router here
 app.use(morgan("dev"));
 app.use(express.json());
-app.use("/api", apiRouter);
+app.use("/api", router);
+// changed apiRouter to router
 
 app.get("*", (req, res, next) => {
   res.status(404);

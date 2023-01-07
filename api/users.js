@@ -2,6 +2,7 @@
 const express = require("express");
 const usersRouter = express.Router();
 const { getUser, getUserByUsername, createUser } = require("../db");
+const { requireUser } = require("./utils")
 const jwt = require("jsonwebtoken");
 
 usersRouter.get("/", async (req, res) => {
@@ -24,6 +25,13 @@ usersRouter.post("/register", async (req, res, next) => {
         name: "UserExistsError",
         message: `User ${username} is already taken.`,
       });
+    }
+
+    if(password.length < 8){
+      next({
+        name: "Password Too Short!",
+        message: "Password Too Short!",
+      })
     }
 
     const user = await createUser({
@@ -66,7 +74,7 @@ usersRouter.post("/login", async (req, res, next) => {
     const user = await getUserByUsername(username);
     const token = jwt.sign({ id: user.id, username }, process.env.JWT_SECRET);
     if (user && user.password == password) {
-      res.send({ message: "you're logged in!", token });
+      res.send({ message: "you're logged in!", token, user });
     } else {
       next({
         name: "IncorrectCredentialsError",
@@ -80,17 +88,17 @@ usersRouter.post("/login", async (req, res, next) => {
 });
 
 // GET /api/users/me
-usersRouter.get("/", async (req, res) => {
-  const users = await getUser();
 
-  res.send({
-    users,
-  });
-});
+usersRouter.get("/me", requireUser, async (req, res, next) => {
+  const user = await getUser(username, password)
+  const token = jwt.sign({ id: user.id, username }, process.env.JWT_SECRET);
+  console.log("Hi I'm ", user)
+  res.send({user,})
+})
 
 // GET /api/users/:username/routines
 usersRouter.get("/", async (req, res) => {
-  const users = await getUser();
+  const users = await getUser(username, password);
 
   res.send({
     users,

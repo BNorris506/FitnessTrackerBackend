@@ -25,8 +25,8 @@ async function createUser({ username, password }) {
 
 async function getUser({ username, password }) {
   try {
-    const user = await getUserByUsername(username)
-    if(password == user.password){
+    const _user = await getUserByUsername(username)
+    if(password == _user.password){
     const { rows: [user] } = await client.query(
       `
       SELECT username, id

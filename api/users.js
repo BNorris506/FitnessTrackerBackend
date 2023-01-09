@@ -7,17 +7,17 @@ const {
   createUser,
   getPublicRoutinesByUser,
 } = require("../db");
-// const { requireUser } = require("./utils");
+const { requireUser } = require("./utils");
 const jwt = require("jsonwebtoken");
-// const { JWT_SECRET } = process.env;
+const { JWT_SECRET } = process.env;
 
-usersRouter.get("/", async (req, res) => {
-  const users = await getUser();
+// usersRouter.get("/", async (req, res) => {
+//   const users = await getUser();
 
-  res.send({
-    users,
-  });
-});
+//   res.send({
+//     users,
+//   });
+// });
 
 // POST /api/users/register
 usersRouter.post("/register", async (req, res, next) => {
@@ -50,7 +50,7 @@ usersRouter.post("/register", async (req, res, next) => {
         id: user.id,
         username,
       },
-      process.env.JWT_SECRET,
+      JWT_SECRET,
       {
         expiresIn: "1w",
       }
@@ -78,7 +78,7 @@ usersRouter.post("/login", async (req, res, next) => {
 
   try {
     const user = await getUserByUsername(username);
-    const token = jwt.sign({ id: user.id, username }, process.env.JWT_SECRET);
+    const token = jwt.sign({ id: user.id, username }, JWT_SECRET);
     if (user && user.password == password) {
       res.send({ message: "you're logged in!", token, user });
     } else {
@@ -95,20 +95,10 @@ usersRouter.post("/login", async (req, res, next) => {
 
 // GET /api/users/me
 
-usersRouter.get("/me", async (req, res, next) => {
+usersRouter.get("/me", requireUser, async (req, res, next) => {
   const { username, password } = req.body;
   try {
-    const user = req.user;
-    console.log("This is the user:", user);
-    const token = jwt.sign({ id: user.id, username }, process.env.JWT_SECRET);
-    if (user && user.password == password) {
-      res.send({ user, token });
-    } else {
-      next({
-        name: "IncorrectCredentialsError",
-        message: "Username or password is incorrect",
-      });
-    }
+    res.send(req.user)
   } catch (error) {
     console.log(error);
     next(error);

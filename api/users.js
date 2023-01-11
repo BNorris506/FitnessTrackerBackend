@@ -96,7 +96,6 @@ usersRouter.post("/login", async (req, res, next) => {
 // GET /api/users/me
 
 usersRouter.get("/me", requireUser, async (req, res, next) => {
-  const { username, password } = req.body;
   try {
     res.send(req.user)
   } catch (error) {
